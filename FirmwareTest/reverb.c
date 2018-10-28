@@ -1,23 +1,30 @@
 #include "reverb.h"
-
+#include "trace.h"
 #include <string.h>
-#include <stdio.h>
 
-static reverbsample_t delay_getCurrent(rvbdelay_s *s)
+static void delay_init(rvbdelay_s *s, rvbsample_t *buffer, int length)
+{
+	s->at = 0;
+	s->buffer = buffer;
+	s->length = length;
+	//memset(s->buffer, 0, length * sizeof(rvbsample_t)); // this is done for all buffers at once, in reverb_init()
+}
+
+static rvbsample_t delay_getCurrent(rvbdelay_s *s)
 {
 	return s->buffer[s->at];
 }
 
-static reverbsample_t delay_getOffs(rvbdelay_s *s, int offset)
+static rvbsample_t delay_getOffs(rvbdelay_s *s, int offset)
 {
 	offset = s->at + offset;
 	offset %= s->length;
 	return s->buffer[offset];
 }
 
-static reverbsample_t delay_clock(rvbdelay_s *s, reverbsample_t in)
+static rvbsample_t delay_clock(rvbdelay_s *s, rvbsample_t in)
 {
-	reverbsample_t res = s->buffer[s->at];
+	rvbsample_t res = s->buffer[s->at];
 
 	s->buffer[s->at] = in;
 
@@ -30,7 +37,7 @@ static reverbsample_t delay_clock(rvbdelay_s *s, reverbsample_t in)
 //#define ARITH_SAT
 #define RVB_FRACT_MUL(s, f) (((int)(s) * (int)(1024 * (f))) >> 10)
 
-static reverbsample_t revb_add(int a, int b)
+static rvbsample_t revb_add(int a, int b)
 {
 	int res = a + b;
 #ifdef ARITH_SAT
@@ -45,7 +52,7 @@ static reverbsample_t revb_add(int a, int b)
 	return res;
 }
 
-static reverbsample_t revb_subtract(int a, int b)
+static rvbsample_t revb_subtract(int a, int b)
 {
 	int res = a - b;
 #ifdef ARITH_SAT
@@ -60,20 +67,32 @@ static reverbsample_t revb_subtract(int a, int b)
 	return res;
 }
 
-static reverbsample_t delay_allpassClock(rvbdelay_s *s, reverbsample_t in)
+static rvbsample_t delay_allpassClock(rvbdelay_s *s, rvbsample_t in)
 {
-	reverbsample_t tap = delay_getCurrent(s);
-	reverbsample_t nextTap = revb_add(in, (tap >> 1));
-	reverbsample_t out = tap - (nextTap >> 1);
+	rvbsample_t tap = delay_getCurrent(s);
+	rvbsample_t nextTap = revb_add(in, (tap >> 1));
+	rvbsample_t out = tap - (nextTap >> 1);
 	delay_clock(s, nextTap);
 	return out;
 }
 
-reverb_stereo_s reverb_clock(reverb_s *s, reverbsample_t in)
+const static uint16_t randoms[] = {
+	9977, 22818, 10150, 16017, 7706,
+	20368, 21548, 8141, 828, 19946,
+	30493, 26435, 32067, 19160, 10894,
+	3199, 5151, 8919, 15384, 15754,
+	14659, 20190, 6375, 27312, 13401,
+	28226, 16398, 16262, 18484, 10199,
+	12061, 11564, 9222, 9816, 31990,
+	27088, 29907, 13320, 5852, 2419
+};
+
+reverb_stereo_s reverb_clock(reverb_s *s, rvbsample_t in)
 {
 	in = delay_clock(&s->predelay, in);
 
-	srand(123456);
+	int rs = 0;
+
 	reverb_stereo_s result = { 0, 0 };
 	for(int i = 0; i < 4; ++i)
 	{
@@ -81,8 +100,8 @@ reverb_stereo_s reverb_clock(reverb_s *s, reverbsample_t in)
 		s->cur = delay_allpassClock(&s->delays[i * 3], s->cur);
 		s->cur = delay_allpassClock(&s->delays[i * 3 + 1], s->cur);
 		s->cur = delay_clock(&s->delays[i * 3 + 2], s->cur);
-		result.left += delay_getOffs(&s->delays[i * 3 + 2], rand());
-		result.right += delay_getOffs(&s->delays[i * 3 + 2], rand());
+		result.left += delay_getOffs(&s->delays[i * 3 + 2], randoms[rs++]);
+		result.right += delay_getOffs(&s->delays[i * 3 + 2], randoms[rs++]);
 		s->cur = RVB_FRACT_MUL(s->cur, .8);
 	}
 
@@ -91,7 +110,7 @@ reverb_stereo_s reverb_clock(reverb_s *s, reverbsample_t in)
 
 #define DLT(v) ((v) * RVB_MAX_DELAYBUFFER)
 
-const static int delayLengths[] =
+const static uint16_t delayLengths[] =
 {
 	DLT(0.0821132958749669),
 	DLT(0.0758567940494999),
@@ -109,22 +128,19 @@ const static int delayLengths[] =
 
 void reverb_init(reverb_s *s)
 {
-	memset(s->delaybuffer, 0, sizeof(s->delaybuffer));
-	memset(s->predelayBuffer, 0, sizeof(s->predelayBuffer));
-
-	s->predelay.at = 0;
-	s->predelay.buffer = s->predelayBuffer;
-	s->predelay.length = RVB_MAX_PREDELAYBUFFER;
+	s->cur = 0;
+	delay_init(&s->predelay, s->predelayBuffer, RVB_MAX_PREDELAYBUFFER);
 
 	int pos = 0;
 	for(int i = 0; i < RVB_MAX_DELAYS; ++i)
 	{
-		s->delays[i].at = 0;
-		s->delays[i].length = delayLengths[i];
-		s->delays[i].buffer = s->delaybuffer + pos;
+		delay_init(&s->delays[i], s->delaybuffer + pos, delayLengths[i]);
 
 		pos += delayLengths[i];
 	}
 	if(pos >= RVB_MAX_DELAYBUFFER)
 		abort();
+
+	memset(s->delaybuffer, 0, sizeof(s->delaybuffer));
+	memset(s->predelayBuffer, 0, sizeof(s->predelayBuffer));
 }
