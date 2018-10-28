@@ -141,21 +141,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="audioEndpoint.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="reverb.c" />
-    <ClCompile Include="serialPort.cpp" />
     <ClCompile Include="voice.c" />
+    <ClCompile Include="w32\audioEndpoint.cpp" />
+    <ClCompile Include="w32\serialPort.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="audioEndpoint.h" />
-    <ClInclude Include="protocol.h" />
     <ClInclude Include="reverb.h" />
-    <ClInclude Include="serialPort.h" />
     <ClInclude Include="trace.h" />
     <ClInclude Include="voice.h" />
+    <ClInclude Include="w32\audioEndpoint.h" />
     <ClInclude Include="w32\filesystem.h" />
+    <ClInclude Include="w32\protocol.h" />
+    <ClInclude Include="w32\serialPort.h" />
     <ClInclude Include="w32\stream.h" />
+    <ClInclude Include="w32\trace.h" />
     <ClInclude Include="w32\wavWriter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

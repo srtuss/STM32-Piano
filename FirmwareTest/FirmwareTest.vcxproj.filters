@@ -23,10 +23,10 @@
     <ClCompile Include="reverb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="serialPort.cpp">
+    <ClCompile Include="w32\audioEndpoint.cpp">
       <Filter>Source Files\w32</Filter>
     </ClCompile>
-    <ClCompile Include="audioEndpoint.cpp">
+    <ClCompile Include="w32\serialPort.cpp">
       <Filter>Source Files\w32</Filter>
     </ClCompile>
   </ItemGroup>
@@ -49,13 +49,16 @@
     <ClInclude Include="w32\stream.h">
       <Filter>Source Files\w32</Filter>
     </ClInclude>
-    <ClInclude Include="protocol.h">
+    <ClInclude Include="w32\audioEndpoint.h">
       <Filter>Source Files\w32</Filter>
     </ClInclude>
-    <ClInclude Include="serialPort.h">
+    <ClInclude Include="w32\protocol.h">
       <Filter>Source Files\w32</Filter>
     </ClInclude>
-    <ClInclude Include="audioEndpoint.h">
+    <ClInclude Include="w32\serialPort.h">
+      <Filter>Source Files\w32</Filter>
+    </ClInclude>
+    <ClInclude Include="w32\trace.h">
       <Filter>Source Files\w32</Filter>
     </ClInclude>
   </ItemGroup>

@@ -108,7 +108,7 @@ reverb_stereo_s reverb_clock(reverb_s *s, rvbsample_t in)
 	return result;
 }
 
-#define DLT(v) ((v) * RVB_MAX_DELAYBUFFER)
+#define DLT(v) (uint16_t)((v) * RVB_MAX_DELAYBUFFER)
 
 const static uint16_t delayLengths[] =
 {
