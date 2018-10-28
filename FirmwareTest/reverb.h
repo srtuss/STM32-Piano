@@ -1,3 +1,9 @@
+//
+// a simple realistic reverberator
+// based on the Spin Semiconductor Knowledge Base:
+// http://www.spinsemi.com/knowledge_base/effects.html
+//
+
 #ifndef __REVERB_H
 #define __REVERB_H
 
@@ -14,10 +20,10 @@ typedef struct reverb_stereo_t
 #define REVERBSAMPLE_MIN			(-32768)
 #define REVERBSAMPLE_TO_FLOAT(v)	((v) / 32768.f)
 #define REVERBSAMPLE_FROM_FLOAT(v)	((reverbsample_t)((v) * 32767.99f))
-#define	RVB_MAX_DELAYS				12
+#define	RVB_MAX_DELAYS				(12)
 
-#define RVB_MAX_DELAYBUFFER	(1024 * 32)
-#define RVB_MAX_PREDELAYBUFFER (1024 * 4)
+#define RVB_MAX_DELAYBUFFER			(1024 * 32)
+#define RVB_MAX_PREDELAYBUFFER		(1024 * 4)
 
 typedef struct rvbdelay_t
 {
