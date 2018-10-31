@@ -37,6 +37,7 @@ static rvbsample_t delay_clock(rvbdelay_s *s, rvbsample_t in)
 //#define ARITH_SAT
 #define RVB_FRACT_MUL(s, f) (((int)(s) * (int)(1024 * (f))) >> 10)
 
+#ifdef ARITH_DEBUG
 static rvbsample_t revb_add(int a, int b)
 {
 	int res = a + b;
@@ -66,6 +67,10 @@ static rvbsample_t revb_subtract(int a, int b)
 #endif
 	return res;
 }
+#else
+#define revb_add(a, b) ((rvbsample_t)((a)+(b)))
+#define revb_subtract(a, b) ((rvbsample_t)((a)-(b)))
+#endif
 
 static rvbsample_t delay_allpassClock(rvbdelay_s *s, rvbsample_t in)
 {

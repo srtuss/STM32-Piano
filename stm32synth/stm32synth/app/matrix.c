@@ -66,10 +66,6 @@ void matrix_handler(void) {
 				keyStates[j] = v;
 
 				mainApp_keyChange(j, v);
-
-				char buf[64];
-				sprintf(buf, "~%i %i\r\n", j, v);
-				mainApp_sendMessage(buf);
 			}
 		}
 		HAL_GPIO_WritePin(outPorts[rowCnt], outPins[rowCnt], 0);
