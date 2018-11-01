@@ -4,9 +4,11 @@
 #include "voice.h"
 #include "reverb.h"
 
+#define SYNTH_MAX_VOICES 6
+
 typedef struct synth_t
 {
-	voice_s voice;
+	voice_s voices[SYNTH_MAX_VOICES];
 	reverb_s reverb;
 } synth_s;
 

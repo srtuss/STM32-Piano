@@ -47,6 +47,13 @@ size_t SerialPort::Read(void *dst, size_t len)
 	return read;
 }
 
+size_t SerialPort::Write(void *dst, size_t len)
+{
+	DWORD written = 0;
+	WriteFile(hComm, dst, len, &written, 0);
+	return written;
+}
+
 int SerialPort::ReadByte()
 {
 	int c = 0;

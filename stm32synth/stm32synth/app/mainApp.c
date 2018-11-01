@@ -55,6 +55,14 @@ void mainApp_handler(void) {
 
 		synth_stereo_s nextSample = synth_clock(&synth);
 
+		if(nextSample.left > 1)
+			nextSample.left = 1;
+		else if(nextSample.left < -1)
+			nextSample.left = -1;
+		if(nextSample.right > 1)
+			nextSample.right = 1;
+		else if(nextSample.right < -1)
+			nextSample.right = -1;
 
 		smpbuf[smpbufPtr].left = 0x800 + (int)(0x300 * nextSample.left);
 		smpbuf[smpbufPtr].right = 0x800 + (int)(0x300 * nextSample.right);
@@ -75,9 +83,9 @@ void mainApp_sendMessage(const char *str) {
 void mainApp_keyChange(int key, int state) {
 	synth_keyChange(&synth, key + transpose, state);
 
-	/*char buf[64];
+	char buf[64];
 	sprintf(buf, "~%i %i\r\n", key, state);
-	mainApp_sendMessage(buf);*/
+	mainApp_sendMessage(buf);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {

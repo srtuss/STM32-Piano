@@ -17,29 +17,23 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="voice.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="reverb.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="w32\audioEndpoint.cpp">
       <Filter>Source Files\w32</Filter>
     </ClCompile>
     <ClCompile Include="w32\serialPort.cpp">
       <Filter>Source Files\w32</Filter>
     </ClCompile>
+    <ClCompile Include="..\stm32synth\stm32synth\app\reverb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stm32synth\stm32synth\app\synth.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stm32synth\stm32synth\app\voice.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="trace.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="reverb.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="voice.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="w32\filesystem.h">
       <Filter>Source Files\w32</Filter>
     </ClInclude>
@@ -58,8 +52,17 @@
     <ClInclude Include="w32\serialPort.h">
       <Filter>Source Files\w32</Filter>
     </ClInclude>
-    <ClInclude Include="w32\trace.h">
-      <Filter>Source Files\w32</Filter>
+    <ClInclude Include="..\stm32synth\stm32synth\app\reverb.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\stm32synth\stm32synth\app\synth.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\stm32synth\stm32synth\app\trace.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\stm32synth\stm32synth\app\voice.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

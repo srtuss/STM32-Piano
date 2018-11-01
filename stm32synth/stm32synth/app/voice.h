@@ -4,6 +4,7 @@
 typedef struct voice_t
 {
 	int state;
+	int keyID; ///< set by the user
 	float phase;
 	float phaseInc;
 } voice_s;

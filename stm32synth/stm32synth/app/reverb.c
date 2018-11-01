@@ -37,7 +37,7 @@ static rvbsample_t delay_clock(rvbdelay_s *s, rvbsample_t in)
 //#define ARITH_SAT
 #define RVB_FRACT_MUL(s, f) (((int)(s) * (int)(1024 * (f))) >> 10)
 
-#ifdef ARITH_DEBUG
+#ifdef _WIN32
 static rvbsample_t revb_add(int a, int b)
 {
 	int res = a + b;
@@ -81,17 +81,6 @@ static rvbsample_t delay_allpassClock(rvbdelay_s *s, rvbsample_t in)
 	return out;
 }
 
-const static uint16_t randoms[] = {
-	9977, 22818, 10150, 16017, 7706,
-	20368, 21548, 8141, 828, 19946,
-	30493, 26435, 32067, 19160, 10894,
-	3199, 5151, 8919, 15384, 15754,
-	14659, 20190, 6375, 27312, 13401,
-	28226, 16398, 16262, 18484, 10199,
-	12061, 11564, 9222, 9816, 31990,
-	27088, 29907, 13320, 5852, 2419
-};
-
 reverb_stereo_s reverb_clock(reverb_s *s, rvbsample_t in)
 {
 	in = delay_clock(&s->predelay, in);
@@ -99,15 +88,17 @@ reverb_stereo_s reverb_clock(reverb_s *s, rvbsample_t in)
 	int rs = 0;
 
 	reverb_stereo_s result = { 0, 0 };
-	for(int i = 0; i < 4; ++i)
+	for(int i = 0; i < RVB_STAGES; ++i)
 	{
+		rvbstage_s *stage = &s->stages[i];
+
 		s->cur += in;
-		s->cur = delay_allpassClock(&s->delays[i * 3], s->cur);
-		s->cur = delay_allpassClock(&s->delays[i * 3 + 1], s->cur);
-		s->cur = delay_clock(&s->delays[i * 3 + 2], s->cur);
-		result.left += delay_getOffs(&s->delays[i * 3 + 2], randoms[rs++]);
-		result.right += delay_getOffs(&s->delays[i * 3 + 2], randoms[rs++]);
-		s->cur = RVB_FRACT_MUL(s->cur, .8);
+		s->cur = delay_allpassClock(&stage->delay[0], s->cur);
+		s->cur = delay_allpassClock(&stage->delay[1], s->cur);
+		s->cur = delay_clock(&stage->delay[2], s->cur);
+		result.left += delay_getOffs(&stage->delay[2], stage->tapOffsets[0]);
+		result.right += delay_getOffs(&stage->delay[2], stage->tapOffsets[1]);
+		s->cur = RVB_FRACT_MUL(s->cur, RVB_LOOP_FEEDBACK);
 	}
 
 	return result;
@@ -133,15 +124,23 @@ const static uint16_t delayLengths[] =
 
 void reverb_init(reverb_s *s)
 {
+	srand(123456);
+
 	s->cur = 0;
 	delay_init(&s->predelay, s->predelayBuffer, RVB_MAX_PREDELAYBUFFER);
 
-	int pos = 0;
-	for(int i = 0; i < RVB_MAX_DELAYS; ++i)
+	int pos = 0, index = 0;
+	for(int i = 0; i < RVB_STAGES; ++i)
 	{
-		delay_init(&s->delays[i], s->delaybuffer + pos, delayLengths[i]);
-
-		pos += delayLengths[i];
+		rvbstage_s *stage = &s->stages[i];
+		for(int j = 0; j < RVB_DELAYS_PER_STAGE; ++j)
+		{
+			delay_init(&stage->delay[j], s->delaybuffer + pos, delayLengths[index]);
+			pos += delayLengths[index];
+			++index;
+		}
+		stage->tapOffsets[0] = rand() % stage->delay[2].length;
+		stage->tapOffsets[1] = rand() % stage->delay[2].length;
 	}
 	if(pos >= RVB_MAX_DELAYBUFFER)
 		abort();

@@ -72,14 +72,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>w32;$(IncludePath)</IncludePath>
+    <IncludePath>X:\Visual Studio 2013\Projects_2018\Misc Musical\STM32 Piano\stm32synth\stm32synth\app;w32;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>w32;$(IncludePath)</IncludePath>
+    <IncludePath>X:\Visual Studio 2013\Projects_2018\Misc Musical\STM32 Piano\stm32synth\stm32synth\app;w32;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -141,22 +141,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\stm32synth\stm32synth\app\reverb.c" />
+    <ClCompile Include="..\stm32synth\stm32synth\app\synth.c" />
+    <ClCompile Include="..\stm32synth\stm32synth\app\voice.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="reverb.c" />
-    <ClCompile Include="voice.c" />
     <ClCompile Include="w32\audioEndpoint.cpp" />
     <ClCompile Include="w32\serialPort.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="reverb.h" />
-    <ClInclude Include="trace.h" />
-    <ClInclude Include="voice.h" />
+    <ClInclude Include="..\stm32synth\stm32synth\app\reverb.h" />
+    <ClInclude Include="..\stm32synth\stm32synth\app\synth.h" />
+    <ClInclude Include="..\stm32synth\stm32synth\app\trace.h" />
+    <ClInclude Include="..\stm32synth\stm32synth\app\voice.h" />
     <ClInclude Include="w32\audioEndpoint.h" />
     <ClInclude Include="w32\filesystem.h" />
     <ClInclude Include="w32\protocol.h" />
     <ClInclude Include="w32\serialPort.h" />
     <ClInclude Include="w32\stream.h" />
-    <ClInclude Include="w32\trace.h" />
     <ClInclude Include="w32\wavWriter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

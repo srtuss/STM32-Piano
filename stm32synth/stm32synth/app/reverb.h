@@ -20,7 +20,10 @@ typedef struct reverb_stereo_t
 #define REVERBSAMPLE_MIN			(-32768)
 #define REVERBSAMPLE_TO_FLOAT(v)	((v) / 32768.f)
 #define REVERBSAMPLE_FROM_FLOAT(v)	((rvbsample_t)((v) * 32767.99f))
+#define RVB_STAGES					(4)
+#define RVB_DELAYS_PER_STAGE		(3)
 #define	RVB_MAX_DELAYS				(12)
+#define RVB_LOOP_FEEDBACK			(.8f)
 
 #define RVB_MAX_DELAYBUFFER			(1024 * 32)
 #define RVB_MAX_PREDELAYBUFFER		(1024 * 4)
@@ -32,12 +35,18 @@ typedef struct rvbdelay_t
 	int at;
 } rvbdelay_s;
 
+typedef struct rvbstage_t
+{
+	rvbdelay_s delay[RVB_DELAYS_PER_STAGE];
+	uint16_t tapOffsets[2];
+} rvbstage_s;
+
 typedef struct reverb_t
 {
 	rvbsample_t cur;
 	rvbsample_t delaybuffer[RVB_MAX_DELAYBUFFER];
 	rvbsample_t predelayBuffer[RVB_MAX_PREDELAYBUFFER];
-	rvbdelay_s delays[RVB_MAX_DELAYS];
+	rvbstage_s stages[RVB_STAGES];
 	rvbdelay_s predelay;
 } reverb_s;
 
