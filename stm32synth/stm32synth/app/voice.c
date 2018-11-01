@@ -1,56 +1,93 @@
 #include "voice.h"
 #include <math.h>
+#include <stdlib.h>
 
 #define SAMPLERATE 44100
 
+void envelope_init(envelope_s *s) {
+	s->state = ADSR_STATE_ATTACK;
+	s->v = 0;
+	s->kA = 500.f / SAMPLERATE;
+	s->kR = .99f;
+}
+
+void envelope_clock(envelope_s *s) {
+	switch(s->state) {
+	case ADSR_STATE_ATTACK:
+		s->v += s->kA;
+		if(s->v > 1) {
+			s->v = 1;
+			s->state = ADSR_STATE_SUSTAIN;
+		}
+		break;
+	case ADSR_STATE_RELEASE:
+		s->v *= s->kR;
+		break;
+	}
+}
+
 void voice_init(voice_s *s)
 {
-	s->phase = 0;
 	s->state = 0;
+	filter_init(&s->filters[0]);
+	filter_init(&s->filters[1]);
+	envelope_init(&s->envelope);
+	envelope_init(&s->fltEnvelope);
 }
 
 void voice_setGate(voice_s *s, int note)
 {
-	s->phaseInc = exp2((note - 69 + 48) / 12.) * 440.f / SAMPLERATE;
+	float dt = 1;
+
+	for(int i = 0; i < VOICE_MAX_OSC; ++i) {
+		float fbase = exp2((note - 69 + 48) / 12.) * 440.f / SAMPLERATE;
+
+		fbase *= dt;
+		dt *= 1.002f;
+
+		s->oscPan[i] = rand() / (float)RAND_MAX;
+
+		osc_init(&s->oscs[i], fbase);
+	}
 	s->state = 1;
+	envelope_init(&s->envelope);
+	envelope_init(&s->fltEnvelope);
 }
 
 void voice_clearGate(voice_s *s, int note)
 {
-	s->state = 0;
+	s->envelope.state = ADSR_STATE_RELEASE;
 }
 
-static inline float blep(float t, float dt)
+voice_stereo_s voice_clock(voice_s *s)
 {
-	// 0 <= t < 1
-	if(t < dt)
-	{
-		t /= dt;
-		return t + t - t*t - 1.f;
-	}
-	// -1 < t < 0
-	else if(t > 1.f - dt)
-	{
-		t = (t - 1.f) / dt;
-		return t*t + t + t + 1.f;
-	}
-	// 0 otherwise
-	else
-		return 0.f;
-}
-
-float voice_clock(voice_s *s)
-{
-	float output = 0;
+	voice_stereo_s output = {0, 0};
 
 	if(!s->state)
-		return 0;
+		return output;
 
-	output += (s->phase - .5f) * 2.f - blep(s->phase, s->phaseInc);
+	for(int i = 0; i < VOICE_MAX_OSC; ++i) {
+		float v = osc_clock(&s->oscs[i]);
+		output.left += v * s->oscPan[i];
+		output.right += v * (1 - s->oscPan[i]);
+	}
 
-	s->phase += s->phaseInc;
-	while(s->phase >= 1)
-		s->phase -= 1;
+	s->filters[0].kF = s->fltEnvelope.v;
+	s->filters[1].kF = s->fltEnvelope.v;
+	envelope_clock(&s->fltEnvelope);
+
+	filter_clock(&s->filters[0], output.left);
+	filter_clock(&s->filters[1], output.right);
+	output.left = s->filters[0].lp;
+	output.right = s->filters[1].lp;
+
+	output.left *= s->envelope.v * 4.f / VOICE_MAX_OSC;
+	output.right *= s->envelope.v * 4.f / VOICE_MAX_OSC;
+
+	envelope_clock(&s->envelope);
+
+	if(s->envelope.state == ADSR_STATE_RELEASE && s->envelope.v < .01f)
+		s->state = 0;
 
 	return output;
 }

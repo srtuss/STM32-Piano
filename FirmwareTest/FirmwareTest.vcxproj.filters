@@ -32,6 +32,12 @@
     <ClCompile Include="..\stm32synth\stm32synth\app\voice.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\stm32synth\stm32synth\app\osc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stm32synth\stm32synth\app\filter.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="w32\filesystem.h">
@@ -62,6 +68,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\stm32synth\stm32synth\app\voice.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\stm32synth\stm32synth\app\osc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\stm32synth\stm32synth\app\filter.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,9 +14,9 @@ synth_stereo_s synth_clock(synth_s *s) {
 
 	for(int i = 0; i < SYNTH_MAX_VOICES; ++i)
 	{
-		float v = voice_clock(&s->voices[i]);
-		wetMix.left += v;
-		wetMix.right += v;
+		voice_stereo_s v = voice_clock(&s->voices[i]);
+		wetMix.left += v.left;
+		wetMix.right += v.right;
 	}
 
 	wetMix.left /= 3;
@@ -35,14 +35,27 @@ void synth_keyChange(synth_s *s, int key, int state) {
 	if(state == 1) {
 		++numOn;
 		
+		int best = 0, found = 0;
+		float bestV = 10000;
 		for(int i = 0; i < SYNTH_MAX_VOICES; ++i)
 		{
 			if(s->voices[i].state == 0)
 			{
 				s->voices[i].keyID = key;
 				voice_setGate(&s->voices[i], key);
+				found = 1;
 				break;
 			}
+			if(s->voices[i].envelope.state == ADSR_STATE_RELEASE) {
+				if(s->voices[i].envelope.v < bestV) {
+					bestV = s->voices[i].envelope.v;
+					best = i;
+				}
+			}
+		}
+		if(!found) {
+			s->voices[best].keyID = key;
+			voice_setGate(&s->voices[best], key);
 		}
 	}
 	else if(state == 0) {
