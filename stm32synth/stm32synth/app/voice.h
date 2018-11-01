@@ -18,8 +18,15 @@ typedef struct envelope_t {
 	float v;
 	int state;
 	float kA; ///< Attack coefficient
+	float kD; ///< Decay coefficient
 	float kR; ///< Release coefficient
+	float kS; ///< Sustain level
 } envelope_s;
+
+typedef struct modulation_t {
+	float gain;
+	float bias;
+} modulation_s;
 
 typedef struct voice_t
 {
@@ -29,6 +36,7 @@ typedef struct voice_t
 	float oscPan[VOICE_MAX_OSC];
 	filter_s filters[VOICE_MAX_FILTERS];
 	envelope_s envelope, fltEnvelope;
+	modulation_s fltModulation;
 } voice_s;
 
 typedef struct voice_stereo_t

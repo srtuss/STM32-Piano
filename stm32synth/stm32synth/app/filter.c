@@ -32,6 +32,6 @@ void filter_init(filter_s* s) {
 	s->hp = 0;
 	s->lp = 0;
 	s->bp = 0;
-	s->kQ = .5f;
+	s->kQ = .2f;
 	s->kF = .5f;
 }

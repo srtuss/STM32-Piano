@@ -6,6 +6,7 @@
 #include "stm32f4xx_hal.h"
 #include "tim.h"
 #include "dac.h"
+#include "random.h"
 
 extern UART_HandleTypeDef huart2;
 typedef struct dac_sample_t {
@@ -64,8 +65,11 @@ void mainApp_handler(void) {
 		else if(nextSample.right < -1)
 			nextSample.right = -1;
 
-		smpbuf[smpbufPtr].left = 0x800 + (int)(0x300 * nextSample.left);
-		smpbuf[smpbufPtr].right = 0x800 + (int)(0x300 * nextSample.right);
+		//nextSample.left += randomFloat() / 0x1000;
+		//nextSample.right += randomFloat() / 0x1000;
+
+		smpbuf[smpbufPtr].left = 0x800 + (int)(0x7FF * nextSample.left);
+		smpbuf[smpbufPtr].right = 0x800 + (int)(0x7FF * nextSample.right);
 
 		if(++smpbufPtr >= MAX_DAC_SAMPLES)
 			smpbufPtr -= MAX_DAC_SAMPLES;
@@ -82,6 +86,7 @@ void mainApp_sendMessage(const char *str) {
 
 void mainApp_keyChange(int key, int state) {
 	synth_keyChange(&synth, key + transpose, state);
+
 
 	char buf[64];
 	sprintf(buf, "~%i %i\r\n", key, state);

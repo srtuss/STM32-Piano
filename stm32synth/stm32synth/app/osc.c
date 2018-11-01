@@ -26,9 +26,29 @@ static inline float blep(float t, float dt)
 		return 0.f;
 }
 
+static inline float pulse_blep(float t, float dt, float t_pw) {
+	float offs = (t_pw - .5f) * 2; // remove the DC offset caused by PWM
+	float v = 0;
+
+	v = t >= t_pw ? 1 : -1;
+	v -= blep(t, dt);
+
+	float t2 = t - t_pw;
+
+	if(t2 < 0)
+		t2 += 1;
+
+	v += blep(t2, dt);
+
+	v += offs;
+
+	return v;
+}
+
 float osc_clock(osc_s *s) {
 	float output = 0;
-	output += s->t * 2 - 1 - blep(s->t, s->tInc);
+	//output += s->t * 2 - 1 - blep(s->t, s->tInc);
+	output += pulse_blep(s->t, s->tInc, .125f);
 
 	s->t += s->tInc;
 	while(s->t >= 1)

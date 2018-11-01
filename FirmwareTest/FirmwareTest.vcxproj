@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\stm32synth\stm32synth\app\echo.c" />
     <ClCompile Include="..\stm32synth\stm32synth\app\filter.c" />
     <ClCompile Include="..\stm32synth\stm32synth\app\osc.c" />
     <ClCompile Include="..\stm32synth\stm32synth\app\reverb.c" />
@@ -151,6 +152,7 @@
     <ClCompile Include="w32\serialPort.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\stm32synth\stm32synth\app\echo.h" />
     <ClInclude Include="..\stm32synth\stm32synth\app\filter.h" />
     <ClInclude Include="..\stm32synth\stm32synth\app\osc.h" />
     <ClInclude Include="..\stm32synth\stm32synth\app\reverb.h" />
