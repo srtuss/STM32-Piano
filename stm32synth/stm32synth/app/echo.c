@@ -30,13 +30,13 @@ static echo_sample_t delay_clock(echo_delay_s *s, echo_sample_t in) {
 }
 
 void echo_init(echo_s* s) {
-	delay_init(&s->delays[0], &s->delaybufferA, ECHO_MAX_DELAYBUFFER - 1000);
-	delay_init(&s->delays[1], &s->delaybufferB, ECHO_MAX_DELAYBUFFER);
+	delay_init(&s->delays[0], s->delaybufferA, ECHO_MAX_DELAYBUFFER - 1000);
+	delay_init(&s->delays[1], s->delaybufferB, ECHO_MAX_DELAYBUFFER);
 }
 
 echo_stereo_s echo_clock(echo_s *s, echo_sample_t left, echo_sample_t right) {
 	echo_stereo_s res;
-	res.left = delay_clock(&s->delays[0], (left + delay_getCurrent(&s->delays[1]) >> 1));
-	res.right = delay_clock(&s->delays[1], (right + delay_getCurrent(&s->delays[0]) >> 1));
+	res.left = delay_clock(&s->delays[0], (left + (delay_getCurrent(&s->delays[1]) >> 1)));
+	res.right = delay_clock(&s->delays[1], (right + (delay_getCurrent(&s->delays[0]) >> 1)));
 	return res;
 }

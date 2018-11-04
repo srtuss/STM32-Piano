@@ -1,4 +1,5 @@
 #include "voice.h"
+
 #include <math.h>
 #include <stdlib.h>
 
@@ -47,17 +48,20 @@ void voice_init(voice_s *s)
 	filter_init(&s->filters[1]);
 	envelope_init(&s->envelope);
 	envelope_init(&s->fltEnvelope);
+
+	s->numOscs = VOICE_MAX_OSC;
+	s->detune = 1.0005f;
 }
 
 void voice_setGate(voice_s *s, int note)
 {
 	float dt = 1;
 
-	float fbase = exp2((note - 69 + 12 * 1) / 12.) * 440.f / SAMPLERATE;
+	float fbase = exp2((note - 69) / 12.) * 440.f / SAMPLERATE;
 
 	for(int i = 0; i < VOICE_MAX_OSC; ++i) {
 		fbase *= dt;
-		dt *= 1.005f;
+		dt *= s->detune;
 
 		s->oscPan[i] = rand() / (float)RAND_MAX;
 
@@ -67,9 +71,9 @@ void voice_setGate(voice_s *s, int note)
 	envelope_init(&s->envelope);
 	envelope_init(&s->fltEnvelope);
 
-	/*s->envelope.kA = 1 / (SAMPLERATE * .002f);
+	s->envelope.kA = 1 / (SAMPLERATE * .002f);
 	s->envelope.kR = .99f;
-	s->envelope.kD = .9999f;
+	s->envelope.kD = .9995f;
 	s->envelope.kS = .5f;
 
 	s->fltEnvelope.kA = 1 / (SAMPLERATE * .002f);
@@ -77,9 +81,9 @@ void voice_setGate(voice_s *s, int note)
 	s->fltEnvelope.kD = .9995f;
 	s->fltEnvelope.kS = .0f;
 	s->fltModulation.gain = .5f;
-	s->fltModulation.bias = .0f;*/
+	s->fltModulation.bias = .0f;
 
-	s->envelope.kA = 1 / (SAMPLERATE * 4.f);
+	/*s->envelope.kA = 1 / (SAMPLERATE * 4.f);
 	s->envelope.kR = .9999f;
 	s->envelope.kD = .9999f;
 	s->envelope.kS = .5f;
@@ -89,10 +93,12 @@ void voice_setGate(voice_s *s, int note)
 	s->fltEnvelope.kD = .9999f;
 	s->fltEnvelope.kS = .0f;
 	s->fltModulation.gain = 1.f;
-	s->fltModulation.bias = .0f;
+	s->fltModulation.bias = .0f;*/
 
 	s->filters[0].kQ = .5f;
 	s->filters[1].kQ = .5f;
+
+	s->numOscs = VOICE_MAX_OSC;
 }
 
 void voice_clearGate(voice_s *s, int note)
@@ -100,21 +106,33 @@ void voice_clearGate(voice_s *s, int note)
 	s->envelope.state = ADSR_STATE_RELEASE;
 }
 
-voice_stereo_s voice_clock(voice_s *s)
+voice_stereo_s voice_clock(voice_s *s, const control_s *control)
 {
 	voice_stereo_s output = {0, 0};
 
 	if(!s->state)
 		return output;
 
-	for(int i = 0; i < VOICE_MAX_OSC; ++i) {
-		float v = osc_clock(&s->oscs[i]);
-		output.left += v * s->oscPan[i];
-		output.right += v * (1 - s->oscPan[i]);
+	if(s->numOscs > 1) {
+		for(int i = 0; i < s->numOscs; ++i) {
+
+			s->oscs[i].pulseWidth = control->pulseWidth;
+
+			float v = osc_clock(&s->oscs[i]);
+			output.left += v * s->oscPan[i];
+			output.right += v * (1 - s->oscPan[i]);
+		}
+	}
+	else {
+		float v = osc_clock(&s->oscs[0]);
+		output.left += v;
+		output.right += v;
 	}
 
-	s->filters[0].kF = s->fltEnvelope.v * s->fltModulation.gain + s->fltModulation.bias;
-	s->filters[1].kF = s->fltEnvelope.v * s->fltModulation.gain + s->fltModulation.bias;
+	s->filters[0].kQ = control->resoBase;
+	s->filters[1].kQ = control->resoBase;
+	s->filters[0].kF = control->cutoffBase + s->fltEnvelope.v * s->fltModulation.gain + s->fltModulation.bias;
+	s->filters[1].kF = control->cutoffBase + s->fltEnvelope.v * s->fltModulation.gain + s->fltModulation.bias;
 	envelope_clock(&s->fltEnvelope);
 
 	filter_clock(&s->filters[0], output.left);

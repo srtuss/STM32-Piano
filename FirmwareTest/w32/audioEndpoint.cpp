@@ -18,7 +18,7 @@ const IID IID_IAudioRenderClient = __uuidof(IAudioRenderClient);
 #define SAFE_RELEASE(punk)  \
               if ((punk) != NULL)  \
                 { (punk)->Release(); (punk) = NULL; }
-#define THROW_ON_ERROR(hr) if(FAILED(hr)) throw new std::exception("error")
+#define THROW_ON_ERROR(hr) if(FAILED(hr)) throw std::exception("error")
 
 
 size_t AudioEndpoint::NumAvailable()
@@ -35,7 +35,7 @@ unsigned char* AudioEndpoint::GetBuffer(size_t num)
 	BYTE *data;
 	HRESULT hr = pRenderClient->GetBuffer(num, &data);
 	if(FAILED(hr))
-		throw new std::exception();
+		throw std::exception();
 	return data;
 }
 
@@ -43,7 +43,7 @@ void AudioEndpoint::ReleaseBuffer(size_t num)
 {
 	HRESULT hr = pRenderClient->ReleaseBuffer(num, flags);
 	if(FAILED(hr))
-		throw new std::exception();
+		throw std::exception();
 }
 
 void AudioEndpoint::Close()
@@ -127,8 +127,8 @@ void AudioEndpoint::Open()
 		EXIT_ON_ERROR(hr)*/
 
 		// Calculate the actual duration of the allocated buffer.
-		hnsActualDuration = (double)REFTIMES_PER_SEC *
-		bufferFrameCount / pwfx->nSamplesPerSec;
+		hnsActualDuration = (REFERENCE_TIME)((double)REFTIMES_PER_SEC *
+		bufferFrameCount / pwfx->nSamplesPerSec);
 
 	hr = pAudioClient->Start();  // Start playing.
 	EXIT_ON_ERROR(hr)

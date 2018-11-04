@@ -16,9 +16,15 @@
 class SerialPort
 {
 	void* hComm;
+	int baudRate = 115200;
+
 public:
 	SerialPort();
 	~SerialPort();
+
+
+	int GetBaudrate();
+
 	/**
       * @brief Open the port
 	  * @param portName Name of the port
@@ -48,9 +54,9 @@ public:
 	size_t GetAvailableRead();
 
 	/**
-	  * @brief Read a byte from the port, or block
+	  * @brief Read a byte from the port
 	  * @return The byte read\n
-	  *			-1 if the connection was closed
+	  *			-1 if nothing was received
 	  */
 	int ReadByte();
 };

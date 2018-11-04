@@ -3,8 +3,10 @@
 
 #include "osc.h"
 #include "filter.h"
+#include "control.h"
+#include <stdint.h>
 
-#define VOICE_MAX_OSC 3
+#define VOICE_MAX_OSC 8
 #define VOICE_MAX_FILTERS 2
 
 enum adsr_state_e {
@@ -16,7 +18,7 @@ enum adsr_state_e {
 
 typedef struct envelope_t {
 	float v;
-	int state;
+	uint8_t state;
 	float kA; ///< Attack coefficient
 	float kD; ///< Decay coefficient
 	float kR; ///< Release coefficient
@@ -32,6 +34,10 @@ typedef struct voice_t
 {
 	int state;
 	int keyID; ///< set by the user
+
+	uint8_t numOscs;
+	float detune;
+
 	osc_s oscs[VOICE_MAX_OSC];
 	float oscPan[VOICE_MAX_OSC];
 	filter_s filters[VOICE_MAX_FILTERS];
@@ -45,7 +51,7 @@ typedef struct voice_stereo_t
 } voice_stereo_s;
 
 extern void voice_init(voice_s *s);
-extern voice_stereo_s voice_clock(voice_s *s);
+extern voice_stereo_s voice_clock(voice_s *s, const control_s *control);
 extern void voice_setGate(voice_s *s, int note);
 extern void voice_clearGate(voice_s *s, int note);
 

@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FirmwareTest", "FirmwareTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MidiTest", "MidiTest\MidiTest.csproj", "{5FBD3C33-4B99-4471-A002-903FEB6E5052}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlSurface", "ControlSurface\ControlSurface.csproj", "{A2D06BA6-B819-4BD5-B392-25ED1D98703C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{5FBD3C33-4B99-4471-A002-903FEB6E5052}.Release|x64.Build.0 = Release|Any CPU
 		{5FBD3C33-4B99-4471-A002-903FEB6E5052}.Release|x86.ActiveCfg = Release|Any CPU
 		{5FBD3C33-4B99-4471-A002-903FEB6E5052}.Release|x86.Build.0 = Release|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Debug|x64.Build.0 = Debug|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Debug|x86.Build.0 = Debug|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Release|x64.ActiveCfg = Release|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Release|x64.Build.0 = Release|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Release|x86.ActiveCfg = Release|Any CPU
+		{A2D06BA6-B819-4BD5-B392-25ED1D98703C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,9 @@
 #include "reverb.h"
 #include "trace.h"
 #include <string.h>
+#ifdef _WIN32
+#include <stdlib.h>
+#endif
 
 static void delay_init(rvbdelay_s *s, rvbsample_t *buffer, int length)
 {

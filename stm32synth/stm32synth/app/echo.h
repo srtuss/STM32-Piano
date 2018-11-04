@@ -8,7 +8,8 @@
 
 #ifdef ECHO_16BIT
 typedef int16_t echo_sample_t;
-#define ECHO_MAX_DELAYBUFFER		(11000)
+#define ECHO_BPM					(140)
+#define ECHO_MAX_DELAYBUFFER		(44100 * 60 * 3 / 8 / ECHO_BPM)
 #define ECHOSAMPLE_MAX				(32767)
 #define ECHOSAMPLE_MIN				(-32768)
 #define ECHOSAMPLE_TO_FLOAT(v)		((v) / 32768.f)

@@ -148,8 +148,10 @@
     <ClCompile Include="..\stm32synth\stm32synth\app\synth.c" />
     <ClCompile Include="..\stm32synth\stm32synth\app\voice.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="w32\audioEndpoint.cpp" />
-    <ClCompile Include="w32\serialPort.cpp" />
+    <ClCompile Include="w32\AudioContext.cpp" />
+    <ClCompile Include="w32\AudioEndpoint.cpp" />
+    <ClCompile Include="w32\SerialPort.cpp" />
+    <ClCompile Include="w32\TcpSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\stm32synth\stm32synth\app\echo.h" />
@@ -159,12 +161,22 @@
     <ClInclude Include="..\stm32synth\stm32synth\app\synth.h" />
     <ClInclude Include="..\stm32synth\stm32synth\app\trace.h" />
     <ClInclude Include="..\stm32synth\stm32synth\app\voice.h" />
-    <ClInclude Include="w32\audioEndpoint.h" />
-    <ClInclude Include="w32\filesystem.h" />
-    <ClInclude Include="w32\protocol.h" />
-    <ClInclude Include="w32\serialPort.h" />
-    <ClInclude Include="w32\stream.h" />
-    <ClInclude Include="w32\wavWriter.h" />
+    <ClInclude Include="Pipe.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="w32\AudioContext.h" />
+    <ClInclude Include="w32\AudioEndpoint.h" />
+    <ClInclude Include="w32\Filesystem.h" />
+    <ClInclude Include="w32\Protocol.h" />
+    <ClInclude Include="w32\SerialPort.h" />
+    <ClInclude Include="w32\Stream.h" />
+    <ClInclude Include="w32\TcpSocket.h" />
+    <ClInclude Include="w32\WavWriter.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FirmwareTest.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="pcbicon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

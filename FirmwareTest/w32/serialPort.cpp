@@ -27,10 +27,22 @@ void SerialPort::Open(const std::string &portName)
 		/*FILE_FLAG_OVERLAPPED*/ 0,
 		0);
 	if(hComm == INVALID_HANDLE_VALUE)
-		throw new std::exception("com open failed");
+		throw std::exception("com open failed");
 
 	DCB dcb = {};
 	GetCommState(hComm, &dcb);
+
+	dcb.BaudRate = baudRate;
+	dcb.StopBits = ONESTOPBIT;
+	dcb.ByteSize = 8;
+	dcb.Parity = NOPARITY;
+	dcb.fDtrControl = DTR_CONTROL_DISABLE;
+
+	if(!SetCommState(hComm, &dcb))
+	{
+		int glr = GetLastError();
+		throw std::exception("SetCommState failed");
+	}
 }
 
 size_t SerialPort::GetAvailableRead()
@@ -60,4 +72,9 @@ int SerialPort::ReadByte()
 	if(Read(&c, 1) == 1)
 		return c;
 	return -1;
+}
+
+int SerialPort::GetBaudrate()
+{
+	return baudRate;
 }

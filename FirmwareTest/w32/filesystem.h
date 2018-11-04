@@ -46,7 +46,7 @@ public:
 	void SetPosition(size_t position)
 	{
 		if(fseek(m_f, position, SEEK_SET) != 0)
-			throw new std::exception("fseek failed");
+			throw std::exception("fseek failed");
 	}
 };
 

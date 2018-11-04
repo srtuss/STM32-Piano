@@ -14,15 +14,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="w32\audioEndpoint.cpp">
-      <Filter>Source Files\w32</Filter>
-    </ClCompile>
-    <ClCompile Include="w32\serialPort.cpp">
-      <Filter>Source Files\w32</Filter>
-    </ClCompile>
     <ClCompile Include="..\stm32synth\stm32synth\app\reverb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -41,26 +32,23 @@
     <ClCompile Include="..\stm32synth\stm32synth\app\echo.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="w32\AudioContext.cpp">
+      <Filter>Source Files\w32</Filter>
+    </ClCompile>
+    <ClCompile Include="w32\AudioEndpoint.cpp">
+      <Filter>Source Files\w32</Filter>
+    </ClCompile>
+    <ClCompile Include="w32\SerialPort.cpp">
+      <Filter>Source Files\w32</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\w32</Filter>
+    </ClCompile>
+    <ClCompile Include="w32\TcpSocket.cpp">
+      <Filter>Source Files\w32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="w32\filesystem.h">
-      <Filter>Source Files\w32</Filter>
-    </ClInclude>
-    <ClInclude Include="w32\wavWriter.h">
-      <Filter>Source Files\w32</Filter>
-    </ClInclude>
-    <ClInclude Include="w32\stream.h">
-      <Filter>Source Files\w32</Filter>
-    </ClInclude>
-    <ClInclude Include="w32\audioEndpoint.h">
-      <Filter>Source Files\w32</Filter>
-    </ClInclude>
-    <ClInclude Include="w32\protocol.h">
-      <Filter>Source Files\w32</Filter>
-    </ClInclude>
-    <ClInclude Include="w32\serialPort.h">
-      <Filter>Source Files\w32</Filter>
-    </ClInclude>
     <ClInclude Include="..\stm32synth\stm32synth\app\reverb.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -82,5 +70,41 @@
     <ClInclude Include="..\stm32synth\stm32synth\app\echo.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="w32\AudioContext.h">
+      <Filter>Source Files\w32</Filter>
+    </ClInclude>
+    <ClInclude Include="w32\AudioEndpoint.h">
+      <Filter>Source Files\w32</Filter>
+    </ClInclude>
+    <ClInclude Include="w32\Filesystem.h">
+      <Filter>Source Files\w32</Filter>
+    </ClInclude>
+    <ClInclude Include="w32\Protocol.h">
+      <Filter>Source Files\w32</Filter>
+    </ClInclude>
+    <ClInclude Include="w32\SerialPort.h">
+      <Filter>Source Files\w32</Filter>
+    </ClInclude>
+    <ClInclude Include="w32\Stream.h">
+      <Filter>Source Files\w32</Filter>
+    </ClInclude>
+    <ClInclude Include="w32\WavWriter.h">
+      <Filter>Source Files\w32</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipe.h" />
+    <ClInclude Include="w32\TcpSocket.h">
+      <Filter>Source Files\w32</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FirmwareTest.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="pcbicon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
