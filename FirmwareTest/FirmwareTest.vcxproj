@@ -72,14 +72,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>X:\Visual Studio 2013\Projects_2018\Misc Musical\STM32 Piano\stm32synth\stm32synth\app;w32;$(IncludePath)</IncludePath>
+    <IncludePath>..\stm32synth\stm32synth\app;w32;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>X:\Visual Studio 2013\Projects_2018\Misc Musical\STM32 Piano\stm32synth\stm32synth\app;w32;$(IncludePath)</IncludePath>
+    <IncludePath>..\stm32synth\stm32synth\app;w32;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -161,7 +161,6 @@
     <ClInclude Include="..\stm32synth\stm32synth\app\synth.h" />
     <ClInclude Include="..\stm32synth\stm32synth\app\trace.h" />
     <ClInclude Include="..\stm32synth\stm32synth\app\voice.h" />
-    <ClInclude Include="Pipe.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="w32\AudioContext.h" />
     <ClInclude Include="w32\AudioEndpoint.h" />

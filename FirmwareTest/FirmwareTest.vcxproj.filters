@@ -92,7 +92,6 @@
     <ClInclude Include="w32\WavWriter.h">
       <Filter>Source Files\w32</Filter>
     </ClInclude>
-    <ClInclude Include="Pipe.h" />
     <ClInclude Include="w32\TcpSocket.h">
       <Filter>Source Files\w32</Filter>
     </ClInclude>

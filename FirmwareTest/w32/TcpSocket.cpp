@@ -28,7 +28,7 @@ void TcpSocket::Connect(const IpEndpoint &ipEndpoint) {
 	{
 		char buf[64];
 		sprintf(buf, "WSAStartup failed with error: %d\n", err);
-		throw PipeException(buf);
+		throw std::exception(buf);
 	}
 
 	handle = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -39,7 +39,7 @@ void TcpSocket::Connect(const IpEndpoint &ipEndpoint) {
 
 		char buf[64];
 		sprintf(buf, "socket failed with error: %d\n", err);
-		throw PipeException(buf);
+		throw std::exception(buf);
 	}
 
 	sockaddr_in sa;
@@ -51,7 +51,7 @@ void TcpSocket::Connect(const IpEndpoint &ipEndpoint) {
 
 		char buf[64];
 		sprintf(buf, "connect failed with error: %d\n", err);
-		throw PipeException(buf);
+		throw std::exception(buf);
 	}
 }
 
@@ -96,6 +96,6 @@ void TcpSocket::SetNonblocking(bool nonblocking)
 	{
 		char buf[64];
 		sprintf(buf, "ioctlsocket failed with error: %ld\n", err);
-		throw PipeException(buf);
+		throw std::exception(buf);
 	}
 }

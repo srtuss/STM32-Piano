@@ -2,18 +2,6 @@
 
 #include <string>
 
-class PipeException : public std::exception {
-private:
-	std::string message_;
-public:
-	PipeException(const std::string &message) : message_(message) {
-
-	}
-	virtual const char* what() const throw() {
-		return message_.c_str();
-	}
-};
-
 typedef unsigned long ipAddress_t;
 typedef unsigned short port_t;
 
